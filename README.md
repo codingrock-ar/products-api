@@ -1,14 +1,14 @@
-#A PHP products API
+# A PHP products API
 
 A simple php products api made with Slim Microframework
 
-##Dependencies
+## Dependencies
 
 -PHP 8.2
 -Mysql
 -Composer
 
-##Install
+## Install
 
 1.Download or clone the repo
 2.From the project folder run the command:
