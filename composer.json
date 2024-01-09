@@ -1,0 +1,21 @@
+{
+    "name": "app/products-api",
+    "description": "A small products PHP API",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src"
+        }
+    },
+    "authors": [
+        {
+            "name": "Ariel E. R.",
+            "email": "arielerocca@gmail.com"
+        }
+    ],
+    "require": {
+        "slim/slim": "4.*",
+        "slim/psr7": "^1.6",
+        "selective/basepath": "^2.2",
+        "php-di/php-di": "^7.0"
+    }
+}
