@@ -7,6 +7,7 @@ $config = [
         'password' => '',
         'name' => 'restapi'
     ],
+    'dollarToArsExchange' => 1120,
     'baseUrl' => '',
 ];
 
