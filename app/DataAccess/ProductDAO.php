@@ -7,6 +7,7 @@ class ProductDAO {
 
     public function __construct($c) {
         $this->db = $c->get('db');
+        $this->logger = $c->get('logger');
     }
 
     public function getAllProducts() {
@@ -34,9 +35,10 @@ class ProductDAO {
         $price = $this->db->escape($price);
 
         $sql = "INSERT INTO products (name, price) VALUES ('$name', '$price')";
-        
-        if($this->db->affectedRows() > 0)
-            return $this->db->getLastInsertId();
+        $res = $this->db->executeQuery($sql);
+
+        if($this->db->affectedRows() > 0){}
+            return $this->db->getInsertId();
 
         return false;
     }
