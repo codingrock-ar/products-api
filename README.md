@@ -10,12 +10,13 @@ A simple php products api made with Slim Microframework
 
 ## Install
 
-1.Download or clone the repo
-2.From the project folder run the command:
+1.Download or clone the repo  
+2.From the project folder run the command:  
 
 ```
 composer install
 ```
+3.Import the database from the data folder  
 
 ## To get the project up and running execute the following command:
 
