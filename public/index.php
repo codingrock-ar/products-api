@@ -4,6 +4,8 @@ use DI\Container;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use App\Utilities\DB;
+use App\Utilities\Exchange;
+
 use App\Controllers\ProductController;
 use App\Services\ProductService;
 
@@ -51,13 +53,7 @@ $app->addRoutingMiddleware();
  */
 $errorMiddleware = $app->addErrorMiddleware(true, true, true);
 
-//$app->add(new Tuupola\Middleware\CorsMiddleware);
-
 $container->set('config', $config);
-
-$container->set('db', function ($c) {
-    return new DB($c->get('config')['db']);
-});
 
 $container->set('logger', function($c){
     $logger = new Logger('my-log');
@@ -65,14 +61,33 @@ $container->set('logger', function($c){
     return $logger;
 });
 
+$container->set('db', function ($c) {
+    return new DB($c->get('config')['db']);
+});
+
+$container->set('exchange', function ($c) {
+    $config = $c->get('config');
+    return new Exchange($config['dollarToArsExchange']);
+});
+
 $container->set('ProductService', function ($c) {
     return new ProductService($c);
 });
+
 /*
 $app->options('/{routes:.+}', function ($request, $response, $args) {
     return $response;
 });
 */
+
+$app->add(function ($request, $handler) {
+    $response = $handler->handle($request);
+    return $response
+        ->withHeader('Access-Control-Allow-Origin', '*')
+        ->withHeader('Access-Control-Allow-Credentials', 'true')
+        ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization, x-xsrf-token, x_csrftoken, Cache-Control')
+        ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+});
 
 // Define app routes
 $app->get('/', function (Request $request, Response $response): Response {
@@ -91,15 +106,6 @@ $app->delete('/products/{id}', ProductController::class . ':deleteProduct');
 
 $app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($request, $response) {
     throw new HttpNotFoundException($request);
-});
-
-$app->add(function ($request, $handler) {
-    $response = $handler->handle($request);
-    return $response
-        ->withHeader('Access-Control-Allow-Origin', '*')
-        ->withHeader('Access-Control-Allow-Credentials', 'true')
-        ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization, x-xsrf-token, x_csrftoken, Cache-Control')
-        ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
 });
 
 // Run app

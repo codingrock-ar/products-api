@@ -84,14 +84,10 @@ class ProductController{
         $price = $data["price"];
 
         try {
-            $product_id = $this->ProductService->createProduct($name, $price);
+            $product = $this->ProductService->createProduct($name, $price);
             
-            if($product_id){
-                $response->getBody()->write(json_encode([
-                    'id' => $product_id,
-                    'name' => $name,
-                    'price' => $price
-                ]));
+            if($product){
+                $response->getBody()->write(json_encode($product));
                 
                 return $response
                 ->withHeader('content-type', 'application/json')
@@ -129,11 +125,7 @@ class ProductController{
         try {
             $product = $this->ProductService->updateProduct($id, $name, $price);
             if($product){
-                $response->getBody()->write(json_encode([
-                    'id' => $id,
-                    'name' => $name,
-                    'price' => $price
-                ]));
+                $response->getBody()->write(json_encode($product));
                 return $response
                     ->withHeader('content-type', 'application/json')
                     ->withStatus(200);
